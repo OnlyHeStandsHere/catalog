@@ -7,8 +7,10 @@
         <script src="/static/script/log_in_scripts.js?{{ version }}" type="application/javascript"></script>
     {% endblock %}
 
-{% block content %}
-  <button id="signInButton">Sign In To Google</button>
+{% block nav %}
+    {% include 'restricted_heading.html' %}
+{% endblock %}
 
-  <button id="testButton">Test Button</button>
+{% block content %}
+  <button class="btn btn-success" id="signInButton">Sign With Google</button>
 {% endblock %}

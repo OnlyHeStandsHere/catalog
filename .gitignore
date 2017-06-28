@@ -45,3 +45,12 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+.idea/
+.vagrant/
+__pycache__/
+controllers/__pycache__/
+google/
+lotsofmenus.py
+models/__pycache__/
+static/style/bootstrap.css
+tests/
