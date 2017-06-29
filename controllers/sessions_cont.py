@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, request, flash, make_response
+from flask import Blueprint, render_template, url_for, redirect, request, flash, make_response, jsonify, abort
 from flask import session as login_session
 from .helpers import get_state
 from controllers import CLIENT_SECRET_FILE
@@ -8,8 +8,32 @@ import requests
 from models import db
 from models.users import User
 
-
 login = Blueprint("login", __name__)
+
+
+# A route to accept users from a JSON post
+@login.route('/users', methods=['POST'])
+def add_user():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    email = request.json.get('email')
+
+    # first check to see if the user already exists
+    # if it does return an error, if not, create the new user
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        return jsonify({"error": "That User Already Exists"}), 501
+    else:
+        if username and email and password:
+            user = User(username=username,
+                        email=email)
+            user.hash_password(password)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'username': user.username}), 201
+        else:
+            abort(400)
 
 
 @login.route("/login")
@@ -80,9 +104,7 @@ def google_logout():
             del login_session['id']
             del login_session['email']
             print("You have been logged out")
-            # response = make_response(json.dumps('You Have been successfully logged out.'), 200)
-            # response.headers['Content-Type'] = 'application/json'
-            # return response
+
             flash("You Have Been Logged Out!")
             return redirect(url_for("restaurant.index"))
         else:
