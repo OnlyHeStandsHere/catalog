@@ -10,14 +10,15 @@ class Restaurant(db.Model):
 
     def serialize_menu_items(self):
         return {
-            "id": self.id,
+            "restaurant_id": self.id,
             "name": self.name,
             "menu_items": [i.name for i in self.menu_items]
         }
 
-    def serialize_restaurant(self):
+    @property
+    def serialize(self):
         return {
-            "id": self.id,
+            "restaurant_id": self.id,
             "name": self.name
         }
 

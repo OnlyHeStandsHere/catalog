@@ -47,6 +47,35 @@ def send_token():
 @api.route("/restaurants/json")
 @auth.login_required
 def restaurants_json():
+    """
+    :return: A json object as a list of all available restaurants
+    """
     restaurants = Restaurant.query.all()
-    return jsonify(restaurants=[r.serialize_menu_items() for r in restaurants])
+    return jsonify(restaurants=[r.serialize for r in restaurants])
+
+
+@api.route("/restaurant/<int:restaurant_id>/menu/json")
+@auth.login_required
+def menu_item_json(restaurant_id):
+    """
+    :param restaurant_id: the id of a valid restaurant
+    :return: json for a restaurant id and it's menu items
+    """
+    restaurant = Restaurant.query.get(restaurant_id)
+    if restaurant:
+        data = {}
+        menu_items = []
+        restaurant_json = restaurant.serialize
+        for item in restaurant.menu_items:
+            menu_items.append(item.serialize)
+        data['menu'] = menu_items
+        data['restaurant'] = restaurant_json
+        return jsonify(data)
+    else:
+        data = {}
+        data['error'] = 'restaurant not found'
+        return jsonify(data)
+
+
+
 

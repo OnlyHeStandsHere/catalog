@@ -2,7 +2,7 @@ from flask import Blueprint, flash, render_template, url_for, request, redirect
 from models.menu_items import MenuItem, Restaurant, db
 from flask import session as login_session
 
-# create a bluprint for all menu items
+# create a blueprint for all menu items
 menu_items = Blueprint("menu_item", __name__)
 
 

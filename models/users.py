@@ -66,11 +66,13 @@ class User(db.Model):
     @staticmethod
     def verify_token(token):
         """ verifies the authenticity of the api access token """
-        t = Serializer(token)
+        t = Serializer(api_secret_key)
         try:
             token_data = t.loads(token)
         except BadSignature:        # token is not valid
+            print('bad signature')
             return None
         except SignatureExpired:    # token is valid, but has expired
+            print("signature expired")
             return None
         return token_data['id']

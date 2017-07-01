@@ -13,14 +13,14 @@ class MenuItem(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey(Restaurant.id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
 
+    @property
     def serialize(self):
         return {
-            'id': self.id,
+            'menu_item_id': self.id,
             'name': self.name,
             'desc': self.desc,
             'price': self.price,
             'course': self.course,
-            'restaurant_id': self.restaurant_id
         }
 
     def __repr__(self):
